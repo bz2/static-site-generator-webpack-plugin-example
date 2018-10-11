@@ -7,14 +7,12 @@ module.exports = {
   mode: 'development',
   devtool: 'eval',
   devServer: {
-    contentBase: __dirname + '/build',
     inline: false,
     hot: true,
   },
 
   entry: './src/index',
   output: {
-    path: __dirname + 'build',
     filename: 'bundle.js',
     libraryTarget: 'umd'
   },
@@ -23,7 +21,6 @@ module.exports = {
       {
         test: /\.js/,
         loader: 'babel-loader',
-        include: __dirname + '/src',
       },
       {
         test: /\.css/,
@@ -45,18 +42,23 @@ module.exports = {
             },
           },
         ],
-        include: __dirname + '/src'
       },
       {
         test: /\.(jpg|png)/,
-        loader: 'file-loader?name=assets/img-[hash:6].[ext]',
-        include: __dirname + '/src'
+        loader: 'file-loader',
+        options: {
+          name: 'img-[hash:6].[ext]',
+          outputPath: 'assets/',
+          publicPath: '/assets/',
+        },
       },
       {
         test: /\.(ico|otf|pdf)/,
-        loader: 'file-loader?name=[name].[ext]',
-        include: __dirname + '/src/'
-      }
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        },
+      },
     ],
   },
   plugins: [

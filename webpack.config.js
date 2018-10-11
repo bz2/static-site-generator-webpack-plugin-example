@@ -1,27 +1,50 @@
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var ss = require('./src/ss_routes');
 
 module.exports = {
+  mode: 'development',
+  devtool: 'eval',
+  devServer: {
+    contentBase: __dirname + '/build',
+    inline: false,
+    hot: true,
+  },
+
   entry: './src/index',
   output: {
-    path: 'build',
+    path: __dirname + 'build',
     filename: 'bundle.js',
     libraryTarget: 'umd'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js/,
-        loader: 'babel',
+        loader: 'babel-loader',
         include: __dirname + '/src',
       },
       {
         test: /\.css/,
-        loader: ExtractTextPlugin.extract(
-          'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
-        ),
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                autoprefixer({ browsers: ['last 2 versions'] }),
+              ],
+            },
+          },
+        ],
         include: __dirname + '/src'
       },
       {
@@ -36,13 +59,14 @@ module.exports = {
       }
     ],
   },
-  postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ],
   plugins: [
-    new ExtractTextPlugin("styles.css"),
+    new MiniCssExtractPlugin({ filename: 'styles.css' }),
     new StaticSiteGeneratorPlugin({
       entry: 'main',
       paths: ss.routes,
-      locals: ss,
-    })
+      globals: {
+        window: { addEventListener: () => {} },
+      },
+    }),
   ]
 };

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, IndexLink} from 'react-router'
+import { Link } from 'react-router-dom'
 import style from './Header.css'
 
 export default class Header extends React.Component {

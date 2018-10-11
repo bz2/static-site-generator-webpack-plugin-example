@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, IndexLink} from 'react-router'
+import { Link, NavLink } from 'react-router-dom'
 import style from './Footer.css'
 
 export default class Footer extends React.Component {
@@ -8,7 +8,7 @@ export default class Footer extends React.Component {
       <footer className={style.Footer}>
         <div className={style.FooterContent}>
           <div className={style.Links}>
-            <IndexLink className={style.Link} to="/">Home</IndexLink>
+            <NavLink exact className={style.Link} to="/">Home</NavLink>
             <Link className={style.Link} to="/tech">Tech</Link>
             <Link className={style.Link} to="/contact">Contact</Link>
           </div>

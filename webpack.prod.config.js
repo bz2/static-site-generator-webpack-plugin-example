@@ -41,7 +41,11 @@ module.exports = {
   postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ],
   plugins: [
     new ExtractTextPlugin("styles.css"),
-    new StaticSiteGeneratorPlugin('main', ss.routes, ss),
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: ss.routes,
+      locals: ss,
+    }),
     new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': JSON.stringify('production') } })
   ]
 };
